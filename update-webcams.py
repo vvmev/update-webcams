@@ -140,6 +140,9 @@ if __name__ == "__main__":
             print(f"Updating {cam['title']} from {url}")
           p = WebcamProcessor(cam['title'], cam['filename'], url, **args)
           p.process()
+        except Exception as e:
+          print(f"Unable to process webcam {cam['title']}: {e}", file=sys.stderr)
+          pass
         finally:
           pass
       ftp.quit()
