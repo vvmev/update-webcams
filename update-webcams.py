@@ -25,7 +25,7 @@ class WebcamProcessor():
     self.url = url
     (fh, self.tmp) = tempfile.mkstemp(suffix="." + self.ext)
     os.close(fh)
-    self.ts = datetime.utcnow()
+    self.ts = datetime.now()
 
   def is_valid_file(self):
     try:
