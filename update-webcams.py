@@ -5,9 +5,10 @@ import sys
 import tempfile
 import time
 
+import pysftp
+
 from configparser import ConfigParser
 from datetime import datetime
-from ftplib import FTP
 from shutil import copyfile
 from subprocess import check_output, CalledProcessError
 from urllib.error import URLError
@@ -68,8 +69,9 @@ class WebcamProcessor():
 
   def upload(self):
     if self.ftp:
-      with open(self.tmp, 'rb') as fd:
-        self.ftp.storbinary(f"STOR {self.name}", fd)
+      with open(self.tmp, 'rb') as s:
+        with self.ftp.open(self.name, mode='wb') as d:
+          d.write(s.read())
 
   def finish(self):
     try:
@@ -92,7 +94,8 @@ def replacetoken(s, v):
 
 def get_ftp(g):
   if 'hostname' in g:
-    return FTP(g['hostname'], g['username'], g['password'])
+    return pysftp.Connection(g['hostname'], username=g['username'], password=g['password'])
+    return FTP_TLS(g['hostname'], g['username'], g['password'])
 
 
 if __name__ == "__main__":
@@ -145,7 +148,7 @@ if __name__ == "__main__":
           pass
         finally:
           pass
-      ftp.quit()
+      #ftp.quit()
       ftp = None
       if interval > 0:
         print(f"Sleeping {interval - (time.monotonic() - now)} seconds")
