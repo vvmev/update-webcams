@@ -57,7 +57,7 @@ class WebcamProcessor():
     label = self.ts.strftime(self.label_pattern)
     label = label.replace("{}", self.title)
 
-    cmd = ["gm", "convert", self.tmp, "-fill", "white", "-undercolor", "#00000080", "-gravity", "South",
+    cmd = ["gm", "convert", self.tmp, "-scale", "1920x1080", "-crop", "1440x1080", "-fill", "white", "-undercolor", "#00000080", "-gravity", "South",
            "-font", "Helvetica-Bold", "-pointsize", "18", "-draw", f"text 10,5 \"{label}\"", tmp]
     try:
       check_output(cmd)
